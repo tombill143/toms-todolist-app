@@ -1,24 +1,68 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = "https://srnfkyrojafodjdnuqxt.supabase.co";
+const supabaseKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNybmZreXJvamFmb2RqZG51cXh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzk5MTkzODMsImV4cCI6MTk5NTQ5NTM4M30.8dg-zDW-_No-5jaFD6CQ3UCai_8KSKWy5ImQGL2Rz_s";
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default function Todos() {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState("");
 
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  const fetchTodos = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("todolist")
+        .select("*")
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      if (data) {
+        setTodos(data);
+      }
+    } catch (error) {
+      console.error("Error fetching todos:", error);
+    }
+  };
+
   const handleInputChange = (e) => {
     setNewTodo(e.target.value);
   };
 
-  const addTodo = () => {
+  const addTodo = async () => {
     if (newTodo.trim() !== "") {
-      setTodos([...todos, newTodo]);
-      setNewTodo("");
+      const newTodoItem = {
+        todo: newTodo,
+      };
+
+      try {
+        await supabase.from("todolist").insert([newTodoItem]);
+
+        setTodos((prevTodos) => [...prevTodos, newTodoItem]); // Add the new job directly to the state
+        setNewTodo("");
+      } catch (error) {
+        console.error("Error adding todo:", error);
+      }
     }
   };
 
-  const removeTodo = (index) => {
-    const updatedTodos = [...todos];
-    updatedTodos.splice(index, 1);
-    setTodos(updatedTodos);
+  const removeTodo = async (id) => {
+    try {
+      await supabase.from("todolist").delete().match({ id });
+
+      setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id)); // Remove the job from the state
+    } catch (error) {
+      console.error("Error removing todo:", error);
+    }
   };
 
   return (
@@ -43,11 +87,11 @@ export default function Todos() {
           </button>
         </div>
         <ul className="list-disc pl-6">
-          {todos.map((todo, index) => (
-            <li key={index} className="mb-2">
-              {todo}
+          {todos.map((todo) => (
+            <li key={todo.id} className="mb-2">
+              {todo.todo}
               <button
-                onClick={() => removeTodo(index)}
+                onClick={() => removeTodo(todo.id)}
                 className="ml-2 text-red-500"
               >
                 Remove
