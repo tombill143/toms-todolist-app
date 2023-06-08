@@ -81,7 +81,10 @@ export default function Todos() {
           />
           <button
             onClick={addTodo}
-            className="bg-blue-500 text-white px-4 py-2 rounded transition duration-200 transform hover:scale-110"
+            className="bg-blue-500 text-white px-4 font-bold py-2 rounded transition duration-200 transform hover:scale-110"
+            style={{
+              background: "linear-gradient(to top right, blue, cyan)",
+            }}
           >
             Add Job To List
           </button>
