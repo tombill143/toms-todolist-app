@@ -72,7 +72,7 @@ export default function Todos() {
       </h1>
       <div className="max-w-md mx-auto my-16 p-6 bg-white rounded">
         <h1 className="text-2xl font-bold mb-4">Todo List</h1>
-        <div className="flex mb-2">
+        <div className="flex mb-6">
           <input
             type="text"
             value={newTodo}
@@ -81,20 +81,34 @@ export default function Todos() {
           />
           <button
             onClick={addTodo}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            className="bg-blue-500 text-white px-4 py-2 rounded transition duration-200 transform hover:scale-110"
           >
             Add Job To List
           </button>
         </div>
+
         <ul className="list-disc pl-6">
           {todos.map((todo) => (
-            <li key={todo.id} className="mb-2">
-              {todo.todo}
+            <li key={todo.id} className="flex items-center mb-2">
+              <span className="flex-grow">{todo.todo}</span>
               <button
                 onClick={() => removeTodo(todo.id)}
-                className="ml-2 text-red-500"
+                className="text-white bg-red-500 ml-2 pb-1 rounded-full w-10 h-10 flex items-center justify-center transition duration-200 transform hover:scale-110"
+                style={{
+                  borderRadius: "10%",
+                  background: "linear-gradient(to top right, red, orange)",
+                }}
               >
-                Remove
+                <span className="text-xl font-bold">
+                  <span
+                    className="p-2"
+                    style={{
+                      textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+                    }}
+                  >
+                    x
+                  </span>
+                </span>
               </button>
             </li>
           ))}
