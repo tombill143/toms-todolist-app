@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
+import Head from "next/head";
 
 const supabaseUrl = "https://srnfkyrojafodjdnuqxt.supabase.co";
 const supabaseKey =
@@ -67,6 +68,9 @@ export default function Todos() {
 
   return (
     <>
+      <Head>
+        <title>Todo List</title>
+      </Head>
       <h1
         className="text-3xl font-bold text-center mt-12 mb-4"
         style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)" }}
