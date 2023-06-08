@@ -67,7 +67,10 @@ export default function Todos() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold text-center mt-12 mb-4">
+      <h1
+        className="text-3xl font-bold text-center mt-12 mb-4"
+        style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)" }}
+      >
         Jobs to do over the next few months
       </h1>
       <div className="max-w-md mx-auto my-16 p-6 bg-white rounded">
